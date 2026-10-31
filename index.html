@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CUA-Master: Scaling Computer-use Agents through Open-World Recursive Improvements</title>
+<meta name="description" content="CUA-Master is a nested double-loop recursive improvement framework for computer-use agents. CUA-Master-27B scores 80.2 on OSWorld Verified, 36.9 on OSWorld 2.0, 43.9 on WeaveBench, and 25.0 on Agents' Last Exam.">
+<meta property="og:title" content="CUA-Master: Scaling Computer-use Agents through Open-World Recursive Improvements">
+<meta property="og:description" content="A nested double-loop recursive improvement framework that scales computer-use agents with open-world knowledge.">
+<meta property="og:image" content="static/images/fig1_benchmarks.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #d93025;
+    --accent-dark: #b3241b;
+    --accent-soft: #fdeceb;
+    --green: #3d8b4f;
+    --green-soft: #e8f4ea;
+    --ink: #1c1e21;
+    --ink-soft: #5f6368;
+    --line: #e8eaed;
+    --bg-soft: #f8f9fa;
+    --radius: 14px;
+    --maxw: 1060px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Inter", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    line-height: 1.65;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    background:
+      radial-gradient(1000px 420px at 85% -10%, var(--accent-soft) 0%, transparent 60%),
+      radial-gradient(800px 380px at 10% -20%, var(--green-soft) 0%, transparent 55%),
+      #fff;
+    border-bottom: 1px solid var(--line);
+    padding: 72px 0 56px;
+    text-align: center;
+  }
+  .hero .badge {
+    display: inline-block;
+    font-size: 13px; font-weight: 600; letter-spacing: .04em;
+    color: var(--accent); background: var(--accent-soft);
+    border: 1px solid #f6c9c5;
+    padding: 4px 14px; border-radius: 999px; margin-bottom: 22px;
+  }
+  h1 {
+    font-size: clamp(28px, 4.5vw, 44px);
+    font-weight: 800; line-height: 1.18; letter-spacing: -0.015em;
+    max-width: 900px; margin: 0 auto 10px;
+  }
+  h1 .accent { color: var(--accent); }
+  .subtitle { font-size: clamp(16px, 2.2vw, 20px); color: var(--ink-soft); font-weight: 500; margin-bottom: 28px; }
+  .authors { max-width: 860px; margin: 0 auto 8px; font-size: 15.5px; color: var(--ink); }
+  .authors a { color: inherit; text-decoration: none; }
+  .authors .lead { font-weight: 600; }
+  .affil { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 30px; }
+  .affil sup { color: var(--accent); font-weight: 600; }
+  .btns { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; border-radius: 999px;
+    font-size: 15px; font-weight: 600; text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.12); }
+  .btn-dark { background: var(--ink); color: #fff; }
+  .btn-red { background: var(--accent); color: #fff; }
+  .btn-ghost { background: #fff; color: var(--ink); border: 1.5px solid var(--line); }
+
+  /* ---------- stat cards ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: -34px; }
+  .stat {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px 14px 16px; text-align: center;
+    box-shadow: 0 8px 28px rgba(28,30,33,.07);
+  }
+  .stat .num { font-size: clamp(26px, 3.4vw, 36px); font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+  .stat .name { font-size: 13.5px; font-weight: 600; margin-top: 2px; }
+  .stat .note { font-size: 12px; color: var(--ink-soft); }
+
+  /* ---------- sections ---------- */
+  section { padding: 64px 0 8px; }
+  .kicker {
+    font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  h2 { font-size: clamp(22px, 3vw, 30px); font-weight: 800; letter-spacing: -0.01em; margin-bottom: 16px; }
+  .prose { font-size: 16.5px; color: #333; max-width: 920px; }
+  .prose b { color: var(--ink); }
+  figure { margin: 28px 0 8px; }
+  figure img {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--line); border-radius: var(--radius);
+    background: #fff; padding: 10px;
+  }
+  figcaption { font-size: 13.5px; color: var(--ink-soft); margin-top: 10px; text-align: center; }
+
+  /* ---------- feature cards ---------- */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
+  .card {
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px 20px;
+  }
+  .card .icon { font-size: 24px; margin-bottom: 10px; }
+  .card h3 { font-size: 16.5px; font-weight: 700; margin-bottom: 6px; }
+  .card p { font-size: 14.5px; color: var(--ink-soft); }
+
+  /* ---------- highlight band ---------- */
+  .band {
+    background: var(--ink); color: #fff; border-radius: var(--radius);
+    padding: 28px 30px; margin-top: 32px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; text-align: center;
+  }
+  .band .num { font-size: 26px; font-weight: 800; color: #ffd7d3; }
+  .band .lbl { font-size: 13px; color: #c9cccf; }
+
+  /* ---------- results table ---------- */
+  .tbl-wrap { overflow-x: auto; margin-top: 28px; border: 1px solid var(--line); border-radius: var(--radius); }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; min-width: 640px; }
+  th, td { padding: 10px 16px; text-align: center; white-space: nowrap; }
+  th { background: var(--bg-soft); font-weight: 700; font-size: 13.5px; border-bottom: 1px solid var(--line); }
+  td:first-child, th:first-child { text-align: left; }
+  tbody tr { border-bottom: 1px solid var(--line); }
+  tbody tr:last-child { border-bottom: none; }
+  tr.ours { background: var(--green-soft); font-weight: 700; }
+  tr.ours td:first-child { color: var(--green); }
+  .closed { color: var(--ink-soft); }
+  .tbl-note { font-size: 12.5px; color: var(--ink-soft); margin-top: 10px; }
+
+  /* ---------- bibtex ---------- */
+  pre.bibtex {
+    background: #16181c; color: #e6e6e6; border-radius: var(--radius);
+    padding: 24px; overflow-x: auto; margin-top: 24px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 13px; line-height: 1.6;
+  }
+  pre.bibtex .k { color: #7ee787; }
+  pre.bibtex .f { color: #79c0ff; }
+
+  footer {
+    margin-top: 72px; padding: 30px 0 40px;
+    border-top: 1px solid var(--line);
+    text-align: center; font-size: 13.5px; color: var(--ink-soft);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 860px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .cards { grid-template-columns: 1fr; }
+    .band { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ======================= HERO ======================= -->
+<header class="hero">
+  <div class="wrap">
+    <div class="badge">CUA-Master-27B &nbsp;·&nbsp; Open-World Recursive Improvements</div>
+    <h1><span class="accent">CUA-Master</span>: Scaling Computer-use Agents through Open-World Recursive Improvements</h1>
+    <p class="subtitle">A nested double-loop recursive framework that keeps expanding what computer-use agents can do.</p>
+    <p class="authors">
+      <span class="lead">Xinlei Yu</span>, Gen Li, Ji Zhao, Zhangquan Chen, Congcong Wang, Shuai Dong, Zelin Peng,
+      Yuqi Xu, Hongrui Wu, Kaiwen Tuo, Cheng Yang, Kaituo Feng, Yifan Wu, Jiayi Zhang,
+      Dongming Wu, Wenqi Shao, Jiaqi Wang, Xiangyu Yue<sup>✉</sup>
+    </p>
+    <p class="affil">MMLab, CUHK &nbsp;·&nbsp; THU &nbsp;·&nbsp; HKUST(GZ) &nbsp;·&nbsp; Explore Academy, JD</p>
+    <div class="btns">
+      <a class="btn btn-red" href="static/CUAMaster.pdf" target="_blank" rel="noopener">📄&nbsp;Paper</a>
+      <a class="btn btn-dark" href="https://github.com/xlyu0106/CUA-Master" target="_blank" rel="noopener">💻&nbsp;Code</a>
+      <a class="btn btn-ghost" href="#results">📊&nbsp;Results</a>
+      <a class="btn btn-ghost" href="#bibtex">🔖&nbsp;BibTeX</a>
+    </div>
+  </div>
+</header>
+
+<!-- ======================= STATS ======================= -->
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><div class="num">80.2</div><div class="name">OSWorld Verified</div><div class="note">avg. score, GUI-only</div></div>
+    <div class="stat"><div class="num">36.9</div><div class="name">OSWorld 2.0</div><div class="note">avg. score, GUI-only</div></div>
+    <div class="stat"><div class="num">43.9</div><div class="name">WeaveBench</div><div class="note">avg. score, GUI + CLI</div></div>
+    <div class="stat"><div class="num">25.0</div><div class="name">Agents&rsquo; Last Exam</div><div class="note">full-pass rate, GUI + CLI</div></div>
+  </div>
+</div>
+
+<!-- ======================= OVERVIEW ======================= -->
+<section id="overview">
+  <div class="wrap">
+    <div class="kicker">Overview</div>
+    <h2>Competitive with far larger &amp; closed-source models — at only 27B</h2>
+    <p class="prose">
+      <b>CUA-Master-27B</b> achieves competitive performance across GUI-only and GUI&ndash;CLI hybrid benchmarks,
+      consistently outperforming similarly sized specialists and approaching markedly larger or closed-source models,
+      while also executing tasks with <b>fewer steps, fewer tokens, and less wall-clock time</b>.
+    </p>
+    <figure>
+      <img src="static/images/fig1_benchmarks.png" alt="Performance comparison of CUA-Master-27B across four benchmarks">
+      <figcaption>Performance comparisons of CUA-Master-27B and other counterparts across four benchmarks.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ======================= ABSTRACT ======================= -->
+<section id="abstract">
+  <div class="wrap">
+    <div class="kicker">Abstract</div>
+    <h2>Why open-world recursive improvement?</h2>
+    <p class="prose">
+      Development of computer-use agents (CUAs) remains constrained by the limited <b>diversity</b>, <b>controllability</b>,
+      and <b>reliability</b> of interaction data. Conventional pipelines lack iterative feedback, while existing recursive
+      approaches rely on self-generated experiences, limiting ability expansion and yielding diminishing returns.
+      We introduce <b>CUA-Master</b>, a nested double-loop recursive improvement framework.
+      At the <b>system level</b>, an outer <b>world&ndash;data&ndash;model flywheel</b> continuously incorporates open-world corpus and
+      leverages evolving model weaknesses to guide subsequent data construction and optimization iterations.
+      At the <b>data level</b>, an inner flywheel couples <b>open-world seeding</b> and <b>autocatalytic propagation</b>:
+      the former mines authentic workflows as seed tasks from instructional videos with visual-semantic dual-path trajectory
+      reconstruction; the latter transforms these seeds into reusable primitives for controllable synthesis of diverse, complex,
+      and verifiable tasks. A <b>feedback-guided snapshot-rollback retry</b> mechanism further enables efficient and reliable
+      trajectory collection in real environments.
+    </p>
+  </div>
+</section>
+
+<!-- ======================= METHOD ======================= -->
+<section id="method">
+  <div class="wrap">
+    <div class="kicker">Method</div>
+    <h2>A double-loop recursive flywheel</h2>
+    <figure>
+      <img src="static/images/fig2a_pipeline.png" alt="CUA-Master double-loop recursive flywheel pipeline">
+      <figcaption>The recursive flywheel (left) integrates open-world seeding (upper right) and autocatalytic propagation (lower right).</figcaption>
+    </figure>
+    <div class="cards">
+      <div class="card">
+        <div class="icon">🌍</div>
+        <h3>Open-world Seeding</h3>
+        <p>Mines authentic workflows from instructional videos (YouTube, TikTok, Bilibili) via hierarchical corpus harvesting
+           and seed task mining, then reconstructs trajectories with a <b>visual-semantic dual-path</b> mechanism —
+           continuously injecting external knowledge beyond the model&rsquo;s own capabilities.</p>
+      </div>
+      <div class="card">
+        <div class="icon">⚗️</div>
+        <h3>Autocatalytic Propagation</h3>
+        <p>Abstracts seed tasks into <b>reusable ability primitives</b> and composes them into verifiable synthetic tasks,
+           with explicit control over task complexity and application scope — from single-app to cross-app workflows.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔁</div>
+        <h3>Snapshot-Rollback Retry</h3>
+        <p>Feedback-guided retries roll the environment back to the latest valid snapshot instead of restarting from scratch,
+           preserving valid execution prefixes and substantially improving rollout success rate and efficiency.</p>
+      </div>
+    </div>
+    <div class="band">
+      <div><div class="num">8</div><div class="lbl">domains</div></div>
+      <div><div class="num">650+</div><div class="lbl">applications</div></div>
+      <div><div class="num">100+</div><div class="lbl">CUA environments</div></div>
+      <div><div class="num">2,000+</div><div class="lbl">concurrent VMs</div></div>
+    </div>
+    <figure>
+      <img src="static/images/fig2bc_taxonomy.png" alt="Hierarchical application taxonomy and representative applications">
+      <figcaption>Hierarchical taxonomy (8 domains / 36 subdomains / 650+ apps) and representative applications across the eight domains.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ======================= RESULTS ======================= -->
+<section id="results">
+  <div class="wrap">
+    <div class="kicker">Experiments</div>
+    <h2>Strong performance, superior efficiency</h2>
+    <p class="prose">
+      Under a consistent benchmark protocol, CUA-Master-27B improves over UI-Mate-27B by <b>+2.6 / +12.9 / +25.6 / +11.8</b>
+      across the four benchmarks, and matches or surpasses Qwen-CUA-397B-A17B on hybrid settings despite being over an order
+      of magnitude smaller. It also completes tasks with <b>fewer steps and 24&ndash;36% less runtime</b> than comparable models.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th><th>Params</th>
+            <th>OSWorld Verified</th><th>OSWorld 2.0</th><th>WeaveBench</th><th>Agents&rsquo; Last Exam</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="closed"><td>Claude-Opus-5 *</td><td>&ndash;</td><td>86.3</td><td>64.2</td><td>55.7</td><td>28.3</td></tr>
+          <tr class="closed"><td>GPT-5.6-Sol *</td><td>&ndash;</td><td>83.6</td><td>59.0</td><td>50.6</td><td>26.3</td></tr>
+          <tr><td>Kimi-K3-2.8T-A104B</td><td>2.8T</td><td>84.2</td><td>55.9</td><td>43.2</td><td>25.0</td></tr>
+          <tr><td>Qwen-CUA-397B-A17B</td><td>397B</td><td>84.0</td><td>43.6</td><td>35.1</td><td>21.1</td></tr>
+          <tr><td>Qwen-3.8-27B</td><td>27B</td><td>81.2</td><td>36.5</td><td>29.2</td><td>19.1</td></tr>
+          <tr><td>UI-Mate-27B</td><td>27B</td><td>77.6</td><td>24.0</td><td>18.3</td><td>13.2</td></tr>
+          <tr class="ours"><td>CUA-Master-27B (Ours)</td><td>27B</td><td>80.2</td><td>36.9</td><td>43.9</td><td>25.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note">* closed-source models. OSWorld benchmarks are GUI-only; WeaveBench and Agents&rsquo; Last Exam use GUI+CLI hybrid assessment. Full table with step / token / time metrics in the paper.</p>
+    <figure>
+      <img src="static/images/fig3_efficiency.png" alt="Efficiency comparison: score vs. wall-clock time">
+      <figcaption>Performance&ndash;efficiency trade-off: score (y) vs. wall-clock runtime (x); bubble size denotes token consumption. CUA-Master sits in the favorable upper-left region.</figcaption>
+    </figure>
+    <div class="cards">
+      <div class="card">
+        <div class="icon">🖥️</div>
+        <h3>Cross-platform generalization</h3>
+        <p>Without platform-specific tuning, CUA-Master-27B scores <b>56.2</b> on WindowsAgentArena, <b>43.0</b> on MacOSWorld,
+           and <b>59.9</b> on MacAgentBench — generalizing across Linux, Windows, and macOS.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📈</div>
+        <h3>Gains across iterations</h3>
+        <p>The world&ndash;data&ndash;model flywheel exhibits <b>continuous gains across recursive iterations</b>, with SFT iterations
+           progressively expanding abilities and a final RL stage breaking through the capability plateau.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🧪</div>
+        <h3>Better data synthesis</h3>
+        <p>The double-loop design substantially improves the <b>diversity, coverage, reliability, and controllability</b>
+           of synthesized tasks and trajectories compared to unidirectional or closed-world pipelines.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= BIBTEX ======================= -->
+<section id="bibtex">
+  <div class="wrap">
+    <div class="kicker">Citation</div>
+    <h2>BibTeX</h2>
+    <pre class="bibtex">@article<span class="k">{yu2026cuamaster,</span>
+  <span class="f">title</span>   = {CUA-Master: Scaling Computer-use Agents through Open-World Recursive Improvements},
+  <span class="f">author</span>  = {Yu, Xinlei and Li, Gen and Zhao, Ji and Chen, Zhangquan and Wang, Congcong and Dong, Shuai
+             and Peng, Zelin and Xu, Yuqi and Wu, Hongrui and Tuo, Kaiwen and Yang, Cheng and Feng, Kaituo
+             and Wu, Yifan and Zhang, Jiayi and Wu, Dongming and Shao, Wenqi and Wang, Jiaqi and Yue, Xiangyu},
+  <span class="f">journal</span> = {arXiv preprint},
+  <span class="f">year</span>    = {2026}
+<span class="k">}</span></pre>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    CUA-Master · MMLab CUHK · THU · HKUST(GZ) · Explore Academy, JD —
+    <a href="https://github.com/xlyu0106/CUA-Master" target="_blank" rel="noopener">GitHub</a> ·
+    <a href="static/CUAMaster.pdf" target="_blank" rel="noopener">Paper PDF</a>
+  </div>
+</footer>
+
+</body>
+</html>
