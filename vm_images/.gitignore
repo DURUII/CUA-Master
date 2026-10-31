@@ -1,0 +1,4 @@
+# VM disk contents stay local and are registered through catalog.json.
+**/disk.*
+**/build.log
+macos/runtime/

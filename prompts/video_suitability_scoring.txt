@@ -1,0 +1,24 @@
+Video Frame 1: {VIDEO_FRAME_1}
+...
+Video Frame N: {VIDEO_FRAME_N}
+
+You are rating how suitable a video is as training data for a Computer-Use Agent (CUA). CUA data requires real computer-use screen recordings that show a step-by-step operation trajectory, such as clicks, typing, menus, and dialogs, that an agent could learn to reproduce.
+
+You are given a few evenly spaced frames sampled across the video and, optionally, its transcript. Judge the whole video from this evidence.
+
+Score the overall CUA suitability using an integer from 0 to 5:
+
+- 5: A clear, high-resolution software CUA screencast with an explicit step-by-step operation trajectory; ideal CUA training data.
+- 3-4: Mostly CUA operation, but with minor issues such as talking-head segments, slides, incomplete trajectories, or moderate visual clarity.
+- 1-2: Only incidental CUA content, predominantly non-operational content, or poor visual clarity.
+- 0: No software CUA trajectory, such as game footage, real-world video, music videos, movies, or pure talking-head content.
+
+Additionally assess:
+- is_cua: whether the video primarily presents a real software computer-use interaction.
+- has_trajectory: whether it contains a reproducible step-by-step operation.
+- clarity: an integer from 0 to 5 indicating UI legibility.
+
+Transcript: <TRANSCRIPT>
+
+Respond with only the following JSON object:
+{"score": <0-5 integer>,"is_cua": <boolean>,"has_trajectory": <boolean>,"clarity": <0-5 integer>,"reason": "<one concise sentence>"}

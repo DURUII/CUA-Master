@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cuamaster"
+version = "0.1.0"
+description = "CUAMaster: Scaling Computer-Use Agents through Open-World Recursive Improvement"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "PyYAML>=6.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+seeding = [
+    "google-api-python-client>=2.100.0",
+    "yt-dlp>=2024.1.0",
+    "isodate>=0.6.1",
+    "faster-whisper>=1.0.0",
+]
+annotator = [
+    "anthropic>=0.40.0",
+    "openai>=1.40.0",
+    "httpx>=0.27",
+]
+collection = [
+    "requests>=2.31",
+]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.4",
+]
+
+[project.scripts]
+cuamaster-collect = "cuamaster.collection.collector:main"
+cuamaster-vm-images = "cuamaster.collection.images:main"
+cuamaster-tasks = "cuamaster.collection.tasks_cli:main"
+cuamaster-dataset = "cuamaster.collection.dataset:main"
+cuamaster-synthesize = "cuamaster.propagation.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["cuamaster*", "scripts*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+"cuamaster.collection" = [
+    "assets/claudecode_shell_screenshot_hook.py",
+    "assets/guest_app_inventory.py",
+    "assets/weavebench_computer_mcp/server.py",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "defaults": {
+    "image_store": "../../vm_images",
+    "backend": "command",
+    "provider": "mock-vm-manager",
+    "num_envs": 1,
+    "backend_options": {
+      "action_protocol": "qwen_xml",
+      "command": [
+        "python3",
+        "{config_dir}/../../examples/mock_runner.py",
+        "--image", "{image_path}",
+        "--profile", "{profile_id}",
+        "--output", "{output_dir}"
+      ]
+    }
+  },
+  "profiles": [
+    {
+      "id": "generic-command-smoke",
+      "enabled": true,
+      "os": {"type": "Ubuntu", "version": "22.04", "architecture": "x86_64"},
+      "image": {"path": "../../examples/mock_image.txt"}
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+# Example annotator-model endpoint pool (consumed via `cuamaster.endpoints`).
+#
+# A pool holds one or more OpenAI-compatible base URLs for the same model.
+# Running workers reload this file before each request when its modification
+# time changes, so endpoints can be added or removed without restarting.
+schema_version: 1
+
+# Served model name (as exposed by your OpenAI-compatible server).
+model: your-annotator-model
+
+# Add or remove endpoints here. All endpoints must serve the same model.
+base_urls:
+  - https://your-model-endpoint.example.com/v1
+
+# Environment variable that holds the API key (never put keys in this file).
+api_key_env: OPENAI_API_KEY
+
+routing:
+  reload_on_request: true
+  failure_threshold: 1
+  cooldown_seconds: 15
+  # Prefer instances with no or very small queues (needs /metrics-style probes).
+  load_aware: true
+  load_probe_interval_seconds: 5
+  load_probe_timeout_seconds: 1
+  max_waiting_requests: 2

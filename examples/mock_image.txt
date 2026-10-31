@@ -1,0 +1,5 @@
+Placeholder VM image for examples/mock_runner.py.
+
+The mock command runner never boots a VM; the collector only threads this
+path through to the runner as {image_path}. Real profiles should reference
+a catalog entry in vm_images/ via "image": {"id": ...} instead.

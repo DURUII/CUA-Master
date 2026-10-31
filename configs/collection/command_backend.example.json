@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "defaults": {
+    "image_store": "../../vm_images",
+    "backend": "command",
+    "provider": "my-vm-manager",
+    "num_envs": 2,
+    "backend_options": {
+      "action_protocol": "qwen_xml",
+      "cwd": ".",
+      "command": [
+        "/path/to/your/collector",
+        "--vm-image", "{image_path}",
+        "--profile", "{profile_id}",
+        "--workers", "{num_envs}",
+        "--output", "{output_dir}"
+      ],
+      "env": {
+        "COLLECTION_OS": "{os_type}",
+        "COLLECTION_IMAGE_ID": "{image_id}"
+      }
+    }
+  },
+  "profiles": [
+    {
+      "id": "my-linux-profile",
+      "enabled": true,
+      "os": {"type": "Fedora", "version": "42", "architecture": "x86_64"},
+      "image": {"id": "my-fedora-image", "snapshot": "clean-v1"},
+      "software": {"firefox": "stable"}
+    }
+  ]
+}

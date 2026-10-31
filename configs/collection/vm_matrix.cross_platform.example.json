@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "defaults": {
+    "image_store": "../../vm_images",
+    "backend": "weavebench",
+    "provider": "sandbox",
+    "concurrency": 3,
+    "num_envs": 1,
+    "platform_mode": "all",
+    "platform_worker_selection": "random_balanced",
+    "platform_profiles": {
+      "linux": {
+        "os": {"type": "Ubuntu", "version": "22.04", "architecture": "x86_64"},
+        "image": {"id": "your-ubuntu-image-id", "snapshot": "clean"},
+        "backend_options": {"sandbox_vm_backend": "desktop_env"}
+      },
+      "windows": {
+        "os": {"type": "Windows", "version": "10", "architecture": "x86_64"},
+        "image": {"id": "your-windows-image-id", "snapshot": "clean"},
+        "backend_options": {"sandbox_vm_backend": "desktop_env"}
+      },
+      "macos": {
+        "os": {"type": "Darwin", "version": "unknown", "architecture": "x86_64"},
+        "image": {"id": "your-macos-image-id", "snapshot": "clean"},
+        "backend_options": {"sandbox_vm_backend": "macos_kvm"}
+      }
+    },
+    "backend_options": {
+      "action_protocol": "qwen_xml",
+      "root": "/path/to/WeaveBench",
+      "model": "your-model-name",
+      "model_endpoint_pool": "../endpoints/policy_pool.example.yaml",
+      "tasks_root": "/path/to/WeaveBench/cache/tasks",
+      "bench_subdirs": ".",
+      "harness": "claudecode",
+      "mode": "hybrid",
+      "runtime_location": "host",
+      "image_strategy": "runtime-overlay",
+      "sandbox_start_command": "your-sandbox-cli start --image-id {image_id} --resource-id {resource_id} --os-type {os_type} --platform {platform} --architecture {architecture} --vm-backend {vm_backend}",
+      "sandbox_stop_command": "your-sandbox-cli stop --resource-id {resource_id}",
+      "sandbox_remote_catalog": true,
+      "start_timeout_seconds": 2400
+    }
+  },
+  "profiles": [
+    {
+      "id": "hybrid-all-platforms",
+      "os": {"type": "Ubuntu"},
+      "image": {}
+    }
+  ]
+}

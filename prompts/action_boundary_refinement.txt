@@ -1,0 +1,23 @@
+Boundary frame 1: <BOUNDARY_IMAGE_1>
+...
+Boundary frame N: <BOUNDARY_IMAGE_N>
+
+You are refining action boundaries for Computer-Use Agent (CUA) tutorial video mining.
+Use transcript, sampled frames, and candidates to produce accurate atomic GUI, CLI, and structured-tool actions.
+Delete explanation-only candidates, add missing visible CUA actions, split multi-action candidates, and merge duplicated candidates.
+Focus on one continuous CUA episode in the video plan. Prefer the longest reproducible workflow that remains state-continuous and visibly verifiable, with a target of 40+ atomic actions and a minimum long-horizon target of 20 actions when the video supports it.
+Add visible missing actions that are necessary for state transitions, including menu opens, dialog opens, focus clicks before typing, submit/save clicks, waits for navigation, and confirmation actions.
+Represent a complete submitted/executed terminal command as shell.exec with its exact command; do not emit both shell.exec and the lower-level terminal typing/Enter actions for the same transition. Keep unsubmitted terminal text as computer.type. Emit tool.call only for an explicit registered structured invocation with a stable name and args.
+When the same workflow has many visible steps, preserve them as atomic actions instead of collapsing the workflow into only the most important actions.
+
+Reject candidates outside the primary episode unless screenshots/transcript show they are required intermediate actions in the same workflow.
+Do not bridge unexplained jumps with guessed actions.
+
+Allowed action types: <ACTION_SPACE>
+Application: <APPLICATION>
+Video plan: <VIDEO_PLAN_JSON>
+Candidates: <CANDIDATE_JSON>
+Transcript: <TRANSCRIPT>
+
+Return ONLY JSON with this shape:
+{"actions":[{"id":"a1","start":1.0,"end":2.0,"action_type":"shell.exec","args":{"command":"pwd"},"target":"terminal","intent":"print working directory","confidence":0.9,"source_ids":["c1"],"evidence":"..."}],"false_positive_candidate_ids":["c2"],"merge_groups":[["c3","c4"]],"missing_actions":[{"start":3.0,"end":4.0,"action_type":"computer.scroll","args":{"dx":0,"dy":-5},"target":"list","intent":"scroll down","confidence":0.8,"evidence":"..."}]}

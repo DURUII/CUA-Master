@@ -1,0 +1,26 @@
+Trajectory observation 1: <TRAJECTORY_IMAGE_1>
+...
+Trajectory observation N: <TRAJECTORY_IMAGE_N>
+
+You are extracting reusable application-level ability primitives from a Computer-Use Agent (CUA) task and its trajectory. An ability primitive is the smallest independently meaningful, user-visible state transition. It may contain multiple clicks, typing actions, or dialog operations, but should not be an isolated mechanical action or an entire multi-goal workflow. Use the complete task, trajectory, environment, and verifier jointly. Decompose the demonstrated workflow into an ordered primitive sequence.
+
+Requirements:
+- Assign every application a 1-based index and associate each primitive with the application where its main state change occurs.
+- Express each ability as a reusable operation rather than a replay of low-level actions.
+- Record its concrete inputs and observable effects.
+- Include only necessary preconditions. Use "requires:<effect>" when a precondition is produced by an earlier primitive.
+- Record only environment requirements supported by the provided context, including applications, VM capabilities, files, services, and configuration.
+- Derive verification conditions only from the supplied verifier. Do not invent checks; use coverage="none" when the primitive is not independently verifiable.
+- Cite the exact inclusive trajectory step range supporting each primitive.
+- Use failed execution evidence only to identify failure modes.
+- Do not infer operations across missing or unexplained state transitions.
+- Keep primitives ordered, non-duplicated, environment-feasible, and dependency-consistent.
+
+Task: <TASK_JSON>
+Environment: <ENVIRONMENT_CONTEXT_JSON>
+Trajectory outcome: <TRAJECTORY_OUTCOME_JSON>
+Trajectory steps: <TRAJECTORY_STEPS_JSON>
+Verifier: <VERIFIER_JSON_OR_SOURCE>
+
+Return ONLY JSON with this shape:
+{"applications": [{"index": 1, "application": "..."}],"primitives": [{"id": "p1","index": 1,"ability": {"name": "...","intent": "...","inputs": {},"effects": ["..."],"preconditions": ["..."]},"environment": {"required_vm_capabilities": [],"files_or_assets": [],"config_dependencies": []},"verifier": {"coverage": "full|partial|none","observable_postconditions": [],"fragments": []},"source_evidence": {"task_id": "...","episode_id": "...","step_start": 1,"step_end": 3,"success": true},"failure_modes": [],"confidence": 0.0}],"uncovered_steps": [{"step_start": 4, "step_end": 4, "reason": "..."}]}

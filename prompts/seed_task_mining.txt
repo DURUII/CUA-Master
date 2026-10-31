@@ -1,0 +1,16 @@
+Overview frame 1: <OVERVIEW_IMAGE_1>
+...
+Overview frame N: <OVERVIEW_IMAGE_N>
+
+You are planning how to extract Computer-Use Agent (CUA) trajectories from a tutorial video.
+Identify only ranges that contain real software operation, including GUI interaction, terminal commands, and explicit structured tool calls. Exclude intro, outro, marketing, slide-only, talking-head, and explanation-only ranges.
+Choose one primary long-horizon episode: the longest single continuous workflow with a clear user goal, visible start state, many intermediate CUA actions, and visible completion or stable end state. Prefer episodes that can yield 40+ atomic actions; require at least 20 visible actions when possible.
+Do not combine independent examples, repeated demonstrations, or unrelated tutorial sections into one episode. Prefer the longest coherent workflow over isolated tips.
+Also list every other coherent exportable episode in episode_segments so the pipeline can split one tutorial video into multiple trajectories. Each episode must be independently trainable and continuous.
+
+Application: <APPLICATION>
+Taxonomy: <CATEGORY> / <SUBCATEGORY>
+Transcript: <TRANSCRIPT>
+
+Return ONLY JSON with this shape:
+{"task_title":"...","primary_episode":{"start":1.0,"end":60.0,"task":"complete workflow goal","summary":"why this is one coherent episode","confidence":0.0},"episode_segments":[{"start":1.0,"end":60.0,"task":"complete workflow goal","summary":"single coherent workflow","confidence":0.0}],"ignore_ranges":[{"start":0.0,"end":1.0,"reason":"intro"}],"high_value_ranges":[{"start":1.0,"end":10.0,"reason":"CUA operation"}],"confidence":0.0}

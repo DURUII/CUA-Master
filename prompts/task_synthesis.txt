@@ -1,0 +1,9 @@
+You are synthesizing one executable and verifiable Computer-Use Agent (CUA) task from reusable application-level primitives. Select exactly K compatible primitives whose preconditions and environment requirements must be satisfied by the initial environment or preceding primitives. The composition must form one coherent workflow rather than unrelated operations. For a cross-application task, include an explicit handoff artifact or shared state between applications. Instantiate all required files, values, and application states with concrete and consistent entities. Generate a concise, goal-oriented instruction that covers the selected primitives without exposing primitive identifiers or low-level action steps. Merge the primitive-level environment requirements into one executable environment specification, and consolidate their verifier specifications into one task-level verifier. Every requested outcome must be observable and verified, and every verifier check must correspond to the instruction. Do not invent unavailable resources, capabilities, or success criteria. If no valid composition of K primitives exists, return valid=false.
+
+Application set: <APPLICATION_SET>
+Complexity budget: <COMPLEXITY_BUDGET_K>
+Target environment: <ENVIRONMENT_SPEC_JSON>
+Primitive library: <PRIMITIVE_LIBRARY_JSON>
+
+Return ONLY JSON with this shape:
+{"valid": true,"selected_primitives": ["p1", "p2"],"dependency_order": ["p1", "p2"],"task": {"instruction": "...","environment": {"applications": [],"initial_state": [],"assets": [],"requirements": []},"verifier": {"success_logic": "all","checks": [{"target": "...","condition": "...","expected": "..."}]}},"confidence":0.0,"reason": ""}

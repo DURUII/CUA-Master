@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "defaults": {
+    "image_store": "../../vm_images",
+    "backend": "weavebench",
+    "provider": "sandbox",
+    "concurrency": 1,
+    "num_envs": 1,
+    "backend_options": {
+      "action_protocol": "qwen_xml",
+      "root": "/path/to/WeaveBench",
+      "model": "your-model-name",
+      "tasks_root": "/path/to/WeaveBench/cache/tasks",
+      "bench_subdirs": ".",
+      "domains": "DAV,DES,DOC,DSK,GAM,OPS,SPA,WEB",
+      "max_steps": 300,
+      "image_strategy": "runtime-overlay",
+      "runtime_location": "guest",
+      "sandbox_start_command": "your-sandbox-cli start --image-id {image_id} --resource-id {resource_id} --os-type {os_type} --platform {platform} --architecture {architecture} --vm-backend {vm_backend}",
+      "sandbox_stop_command": "your-sandbox-cli stop --resource-id {resource_id}",
+      "sandbox_remote_catalog": true,
+      "start_timeout_seconds": 2400,
+      "stage_image": false,
+      "allow_pull": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "ubuntu-22.04-openclaw-runtime",
+      "os": {"type": "Ubuntu", "version": "22.04", "architecture": "x86_64"},
+      "image": {"id": "osworld-ubuntu-22.04-20260701-controller-v2", "snapshot": "controller-v2"},
+      "backend_options": {"harness": "openclaw"}
+    },
+    {
+      "id": "ubuntu-22.04-codex-runtime",
+      "os": {"type": "Ubuntu", "version": "22.04", "architecture": "x86_64"},
+      "image": {"id": "osworld-ubuntu-22.04-20260701-controller-v2", "snapshot": "controller-v2"},
+      "backend_options": {"harness": "codex"}
+    },
+    {
+      "id": "ubuntu-22.04-claudecode-runtime",
+      "os": {"type": "Ubuntu", "version": "22.04", "architecture": "x86_64"},
+      "image": {"id": "osworld-ubuntu-22.04-20260701-controller-v2", "snapshot": "controller-v2"},
+      "backend_options": {"harness": "claudecode"}
+    },
+    {
+      "id": "ubuntu-22.04-claudecode-hybrid",
+      "os": {"type": "Ubuntu", "version": "22.04", "architecture": "x86_64"},
+      "image": {"id": "osworld-ubuntu-22.04-20260701-controller-v2", "snapshot": "controller-v2"},
+      "backend_options": {"harness": "claudecode", "interaction_harness": "hybrid"}
+    },
+    {
+      "id": "ubuntu-22.04-hermes-runtime",
+      "os": {"type": "Ubuntu", "version": "22.04", "architecture": "x86_64"},
+      "image": {"id": "osworld-ubuntu-22.04-20260701-controller-v2", "snapshot": "controller-v2"},
+      "backend_options": {"harness": "hermes"}
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+# Example autocatalytic-propagation config for `cuamaster.propagation`
+# (paper Sec. 2.4.1). Run with: cuamaster-synthesize --config this-file
+schema_version: 1
+
+sources:
+  # Seed task roots: directories of seed tasks mined by cuamaster.seeding
+  # (or any benchmark-format task directories to primitivize).
+  tasks:
+    - data/seed_tasks
+  # Optional executed-episode evidence for the same tasks.
+  episodes: []
+
+environment:
+  # Versioned VM image catalog (see vm_images/).
+  image_store: vm_images
+  image_id: your-image-id
+  allowed_download_domains: []
+
+generation:
+  # Generator backend: "openai-compatible" | "kimi" | "command" | "deterministic".
+  backend: openai-compatible
+  # Annotator endpoints; see configs/seeding/endpoints.example.yaml for the schema.
+  endpoint_pool: ../seeding/endpoints.example.yaml
+  reasoning_effort: none
+  max_tokens: 16384
+  max_retries: 20
+  request_delay: 0.1
+  timeout_seconds: 7200
+  concurrency: 4
+  variants_per_anchor: 3
+  # Complexity budget K: number of composed primitives per synthetic task.
+  min_capabilities: 2
+  max_capabilities: 4
+  # Application scope N: single-application (false) vs cross-application tasks.
+  allow_cross_app: false
+  allow_cross_source: false
+  allow_local_fixtures: true
+  search:
+    candidate_pool_multiplier: 8
+    beam_width: 64
+    capability_similarity_threshold: 0.88
+    recipe_similarity_threshold: 0.85
+    random_seed: 0
+
+validation:
+  max_repairs: 2
+  require_sandbox: false
+  verifier_command: []
+  reset_trials: 2
+  solve_attempts: 2
+  max_instruction_chars: 4000
+  max_instruction_words: 700
+  require_platform_consistency: true
+  require_supported_evaluator: true
+  require_gui_realism: true
+  scoring:
+    enabled: true
+    minimum_total_score: 0.75
+    minimum_grounding: 0.8
+    minimum_alignment: 0.8
+    minimum_solvability: 0.8
+
+release:
+  diversity_enabled: false
+  semantic_similarity_threshold: 0.85
+  target_promoted_tasks: 0
+  max_promotions_per_anchor: 0
+  platform_targets: {}
+
+output_root: results/propagation

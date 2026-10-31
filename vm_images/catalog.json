@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "images": {
+    "osworld-v2-ubuntu-x86-example": {
+      "path": "linux/osworld-v2-ubuntu-x86-example/disk.qcow2",
+      "descriptor": "linux/osworld-v2-ubuntu-x86-example/descriptor.json",
+      "format": "qcow2",
+      "os": {
+        "type": "Ubuntu",
+        "version": "22.04",
+        "architecture": "x86_64"
+      },
+      "snapshot": "clean-v1",
+      "software": {
+        "chrome": "130.0.6723.58",
+        "firefox": "129.0.2",
+        "libreoffice": "7.3.7.2",
+        "gimp": "2.10.30",
+        "vlc": "3.0.16",
+        "vscode": "1.85.1",
+        "thunderbird": "115.6.0",
+        "gnome-terminal": "3.44.0",
+        "nautilus": "42.6"
+      },
+      "source": "https://your-image-mirror.example.com/osworld-v2-ubuntu-x86.qcow2.zip",
+      "size_bytes": 0,
+      "build": {
+        "verified": false,
+        "benchmark": "OSWorld-V2",
+        "artifact_repository": "xlangai/v2-image",
+        "artifact_path": "osworld-v2-ubuntu-x86.qcow2.zip",
+        "inventory_status": "pending"
+      }
+    },
+    "osworld-windows-10-x64-example": {
+      "path": "windows/osworld-windows-10-x64-example/disk.qcow2",
+      "descriptor": "windows/osworld-windows-10-x64-example/descriptor.json",
+      "format": "qcow2",
+      "os": {
+        "type": "Windows",
+        "version": "10",
+        "architecture": "x86_64"
+      },
+      "snapshot": "upstream-base",
+      "software": {},
+      "source": "hf://datasets/your-org/your-image-dataset/windows-10-x64.qcow2.zip",
+      "size_bytes": 0,
+      "build": {
+        "verified": false,
+        "inventory_status": "pending"
+      }
+    },
+    "osworld-macos-base-example": {
+      "path": "macos/osworld-macos-base-example/disk.qcow2",
+      "descriptor": "macos/osworld-macos-base-example/descriptor.json",
+      "format": "qcow2",
+      "os": {
+        "type": "Darwin",
+        "version": "13",
+        "architecture": "x86_64"
+      },
+      "snapshot": "upstream-base",
+      "software": {},
+      "source": "hf://datasets/your-org/your-image-dataset/macOS.qcow2.zip",
+      "size_bytes": 0,
+      "build": {
+        "verified": false,
+        "inventory_status": "pending"
+      }
+    }
+  }
+}

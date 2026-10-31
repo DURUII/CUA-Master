@@ -1,0 +1,17 @@
+Trajectory observation 1: <TRAJECTORY_IMAGE_1>
+...
+Trajectory observation N: <TRAJECTORY_IMAGE_N>
+
+You are diagnosing a failed Computer-Use Agent (CUA) rollout for snapshot-rollback retry. Given the task, verifier residuals, trajectory, environment state, and available snapshots, identify the earliest action step whose resulting state diverges from the task objective or verifier requirements. Do not simply select the final failed step; preserve the longest valid trajectory prefix and select the latest valid snapshot preceding the divergence.
+
+Generate concise, execution-grounded feedback describing the observed failure and unmet verification condition. Do not provide a privileged solution, such as exact future actions, click coordinates, shell commands, or a hidden reference trajectory. If the failure is caused by the environment or verifier, or cannot be reliably localized, set the corresponding failure_source and return null for unsupported fields.
+
+Failure source: agent, environment, verifier, or inconclusive.
+Task: <TASK>
+Environment: <ENVIRONMENT_SPEC>
+Verifier residuals: <VERIFIER_RESIDUALS>
+Trajectory: <TRAJECTORY_STEPS_JSON>
+Snapshots: <SNAPSHOT_SIGNATURES_JSON>
+
+Return ONLY JSON with this shape:
+{"failure_source":"agent","earliest_divergence_step":7,"rollback_snapshot_id":"snapshot_6","feedback":"The output artifact is not present at the verifier-checked location after step 7.","evidence":"The state after step 7 first conflicts with the required file state.","confidence":0.9}

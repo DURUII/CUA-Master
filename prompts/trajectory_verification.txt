@@ -1,0 +1,23 @@
+Action observation 1: <ACTION_IMAGE_1>
+...
+Action observation N: <ACTION_IMAGE_N>
+
+You are verifying a Computer-Use Agent (CUA) trajectory mined from a tutorial video.
+Judge whether the selected steps form a coherent, trainable CUA trajectory or self-contained CUA subtask across GUI, CLI, and structured tools. Use screenshots when provided.
+Set trajectory_valid=true when the steps are locally continuous, screenshots align with actions, and the final state is stable, even if the clip is only a useful subtask of a broader video task.
+For exportable_for_training=true, require a single continuous workflow or complete subtask with no large unexplained state jumps, enough intermediate actions to reproduce that subtask, aligned pre/post screenshots, and a visible completed or stable end state.
+Long-horizon training prefers 20+ actions and ideally 40+ actions, but quality is more important than length. Do not mark a long chain exportable if it contains task drift, hidden work, unrelated side workflows, order errors, or unstable end state.
+Set exportable_for_training=false when the task title claims a goal that the selected steps do not perform or visibly complete, even if the individual actions are locally plausible.
+Set exportable_for_training=false when steps stitch together unrelated apps, sites, tabs, examples, competitor research, search/ChatGPT side workflows, or page contexts without visible navigation and return actions.
+Prefer exportable_for_training=true for coherent trajectories with 3 or more valid steps when they form a stable, verifiable subtask. Do not reward length by itself.
+Do not reject a short trajectory solely because it does not complete the entire tutorial-level task; reject it only if it is a mere tip, lacks a stable subtask goal, omits essential intermediate actions for the visible subtask, has task/step mismatch, or stitches unrelated examples.
+When the trajectory is a valid fragment but not exportable as a complete workflow/subtask, set trajectory_valid=true and exportable_for_training=false, and explain what is missing.
+
+Application: <APPLICATION>
+Transcript: <TRANSCRIPT>
+Task: <TASK>
+Images provided: <IMAGE_COUNT>
+Steps: <TRAJECTORY_STEPS_JSON>
+
+Return ONLY JSON with this shape:
+{"trajectory_valid":true,"exportable_for_training":true,"quality_score":4,"step_validity":[{"index":1,"valid":true,"reason":"..."}],"missing_step_ranges":[],"redundant_steps":[],"order_errors":[],"reason":"..."}

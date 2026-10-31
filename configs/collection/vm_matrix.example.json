@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "defaults": {
+    "image_store": "../../vm_images",
+    "backend": "weavebench",
+    "provider": "sandbox",
+    "concurrency": 4,
+    "num_envs": 4,
+    "backend_options": {
+      "action_protocol": "qwen_xml",
+      "root": "/path/to/WeaveBench",
+      "model": "your-model-name",
+      "model_endpoint_pool": "../endpoints/policy_pool.example.yaml",
+      "tasks_root": "/path/to/WeaveBench/cache/tasks",
+      "bench_subdirs": ".",
+      "domains": "DAV,DES,DOC,DSK,GAM,OPS,SPA,WEB",
+      "max_steps": 300,
+      "harness": "claudecode",
+      "mode": "hybrid",
+      "runtime_location": "host",
+      "image_strategy": "runtime-overlay",
+      "sandbox_start_command": "your-sandbox-cli start --image-id {image_id} --image-path {image_path} --resource-id {resource_id} --os-type {os_type} --platform {platform} --architecture {architecture} --vm-backend {vm_backend}",
+      "sandbox_stop_command": "your-sandbox-cli stop --resource-id {resource_id}",
+      "sandbox_remote_catalog": true,
+      "start_timeout_seconds": 2400
+    }
+  },
+  "profiles": [
+    {
+      "id": "ubuntu-22.04-hybrid",
+      "enabled": true,
+      "os": {"type": "Ubuntu", "version": "22.04", "architecture": "x86_64"},
+      "image": {"id": "your-ubuntu-image-id", "snapshot": "clean"}
+    },
+    {
+      "id": "ubuntu-22.04-gui-only",
+      "enabled": false,
+      "os": {"type": "Ubuntu", "version": "22.04", "architecture": "x86_64"},
+      "image": {"id": "your-ubuntu-image-id", "snapshot": "clean"},
+      "backend_options": {"mode": "gui", "runtime_location": "guest"}
+    },
+    {
+      "id": "windows-10-remote-ssh",
+      "enabled": false,
+      "provider": "remote_ssh",
+      "os": {"type": "Windows", "version": "10", "architecture": "x86_64"},
+      "image": {"id": "your-windows-image-id", "snapshot": "clean"},
+      "backend_options": {
+        "harness": "claudecode",
+        "runtime_location": "host",
+        "image_strategy": "runtime-overlay",
+        "require_explicit_platform": true,
+        "ssh_host": "kvm-host.example.com",
+        "ssh_port": 22,
+        "ssh_user": "root",
+        "ssh_password_env": "GUI_TRAJECTORY_SSH_PASSWORD"
+      }
+    },
+    {
+      "id": "macos-remote-kvm",
+      "enabled": false,
+      "provider": "remote_ssh",
+      "os": {"type": "Darwin", "version": "unknown", "architecture": "x86_64"},
+      "image": {"id": "your-macos-image-id", "snapshot": "clean"},
+      "backend_options": {
+        "harness": "claudecode",
+        "runtime_location": "host",
+        "image_strategy": "runtime-overlay",
+        "require_explicit_platform": true,
+        "ssh_host": "kvm-host.example.com",
+        "ssh_port": 22,
+        "ssh_user": "root",
+        "ssh_password_env": "GUI_TRAJECTORY_SSH_PASSWORD",
+        "start_timeout_seconds": 1800,
+        "remote_image_path": "/path/on/kvm/host/macos/disk.qcow2",
+        "remote_start_command": "python3 -m cuamaster.collection.macos_kvm_launcher start --resource-id {resource_id} --image-path {image_path} --opencore-dir /path/on/kvm/host/osx-kvm --osk-file /path/on/kvm/host/osx-kvm/osk.txt --ram-size {ram_size} --cpu-cores {cpu_cores}",
+        "remote_stop_command": "python3 -m cuamaster.collection.macos_kvm_launcher stop --resource-id {resource_id}"
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+State frame 1: <STATE_IMAGE_1>
+...
+State frame N: <STATE_IMAGE_N>
+
+You are labeling a short contiguous chain of atomic Computer-Use Agent (CUA) actions from a tutorial video for CUA training.
+Use the state frames and step drafts to label each action. Step i is the transition from state frame i-1 to state frame i in the provided sequence.
+Use the neighboring transitions as context, but return one independent action object for every requested step index.
+Preserve the expected action type unless the screenshots make it clearly impossible. If changed, include changed_action_type_reason with concrete visual evidence.
+Coordinates must be normalized to 0-1000 screen space, x from left to right and y from top to bottom.
+Use shell.exec only for a complete submitted/executed terminal command, not for unsubmitted terminal text. Use tool.call only for an explicit registered structured tool invocation.
+If a requested transition is not a real CUA action, set is_action=false and action=null for that step.
+
+Allowed action types: <ACTION_SPACE>
+Task: <TASK>
+State frames provided: <IMAGE_COUNT>
+Requested steps: <REQUESTED_STEPS_JSON>
+
+Return ONLY a JSON object with this shape:
+{"steps":[{"index":1,"is_action":true,"action":{"type":"computer.click","args":{"x":500,"y":500,"button":"left"}},"intent":"...","confidence":0.0,"target":"...","reason":"...","changed_action_type_reason":""}]}

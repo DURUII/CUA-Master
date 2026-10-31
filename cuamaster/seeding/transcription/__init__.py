@@ -1,0 +1,2 @@
+"""Video transcription stage."""
+

@@ -1,0 +1,66 @@
+# Example dual-path trajectory reconstruction config for
+# `cuamaster.seeding.reconstruction` (paper Sec. 2.3.3).
+# Pass --input and --output-dir on the command line for each run.
+
+video_dir: data/videos
+transcript_dir: data/transcripts
+require_transcript: true
+backend: openai_chat
+concurrency: 4
+split_episodes: true
+split_long_trajectories: true
+trajectory_split_gap_seconds: 120.0
+trajectory_split_min_steps: 20
+
+api:
+  # Annotator endpoints; see endpoints.example.yaml for the pool schema.
+  endpoint_pool: endpoints.example.yaml
+  reasoning_effort: none
+  plan_reasoning_effort: none
+  boundary_reasoning_effort: none
+  selection_reasoning_effort: none
+  step_reasoning_effort: none
+  verify_reasoning_effort: none
+  max_tokens: 16384
+  plan_max_tokens: 65536
+  max_retries: 20
+  request_delay: 0.1
+  step_batch_size: 4
+  step_batch_fallback: true
+  video_plan: true          # seed task mining (prompts/seed_task_mining.txt)
+  overview_frames: 16
+  boundary_refine: true     # action recheck (prompts/action_boundary_refinement.txt)
+  boundary_frames: 32
+  trajectory_select: true
+  ground_steps: true        # action annotation (prompts/action_annotation.txt)
+  verify_trajectory: true   # trajectory verification (prompts/trajectory_verification.txt)
+  frame_width: 512
+
+# Visual trigger path: frame-level appearance-change detection (FFmpeg).
+enable_visual: true
+scene_threshold: 0.18
+max_visual_candidates: 400
+# Semantic trigger path: transcript clause windows around action expressions.
+semantic_pre_roll: 1.0
+semantic_post_roll: 1.5
+# Boundary-lattice temporal overlap tolerance (paper Eq. 5).
+merge_tolerance: 1.5
+min_confidence: 0.4
+
+plan_ignore_overlap_ratio: 0.8
+plan_primary_episode_filter: true
+plan_primary_episode_tolerance: 10.0
+plan_empty_fallback_top_k: 12
+max_boundary_candidates: 240
+max_selected_steps: 200
+extend_short_trajectories: true
+extension_min_steps: 40
+extension_max_gap_seconds: 120.0
+extension_min_confidence: 0.28
+long_min_steps: 20
+long_target_steps: 40
+
+extract_screenshots: true
+screenshot_width: 1280
+observation_offset: 0.0
+post_observation_offset: 0.0

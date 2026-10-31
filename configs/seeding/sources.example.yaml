@@ -1,0 +1,61 @@
+# Example corpus-harvesting config for `cuamaster.seeding.harvesting` (paper Sec. 2.3.1).
+#
+# Search queries are built as the cartesian product of leaf applications and
+# operation-oriented keywords, e.g. "PostgreSQL tutorial". The three-layer
+# taxonomy labels (domain -> subdomain -> application) are attached to every
+# result for downstream filtering and balancing.
+
+# Search backend: "ytdlp" (no API key needed) or "youtube_api" (needs YOUTUBE_API_KEY)
+backend: ytdlp
+
+# ytdlp backend only: pass a login state to bypass anti-bot checks. Set at most one.
+#   cookiefile: path to a Netscape-format cookies.txt exported from a logged-in browser
+#   cookies_from_browser: read cookies live from a local browser, e.g. chrome / firefox / edge
+# cookiefile: configs/cookies.txt
+# cookies_from_browser: chrome
+
+# Metadata gates applied before writing (set to null to disable a filter).
+# Videos shorter than min_duration_sec, longer than max_duration_sec, or
+# uploaded before min_upload_year are dropped; results with unknown
+# duration/date are kept.
+min_duration_sec: 30
+max_duration_sec: 18000   # 5h; drop overly long compilations/playlists
+min_upload_year: 2010
+
+# Random delay between queries, in seconds, drawn uniformly from [min, max].
+# Leave both at 0 to disable.
+delay_min_sec: 0.0
+delay_max_sec: 3.0
+
+# Three-layer taxonomy: domain -> subdomain -> application list.
+# This is a small demonstration subset; the full 8-domain / 36-subdomain /
+# 650+-application taxonomy used in the paper (Table 9) is in
+# configs/seeding/taxonomy.yaml — paste the subtrees you want to harvest here.
+taxonomy:
+  Productivity:
+    Office Suite: ["LibreOffice Writer", "LibreOffice Calc", "LibreOffice Impress"]
+  Data & Analytics:
+    Database: ["PostgreSQL", "SQLite", "DBeaver"]
+  Developer Tools:
+    Code Editing: ["Visual Studio Code", "Vim"]
+
+# Operation-oriented keywords combined with each app; empty -> search by app
+# name only. Chosen to surface videos with real, step-by-step on-screen
+# operation trajectories (best signal for CUA training data), not concept
+# overviews.
+keywords:
+  - tutorial
+  - step by step
+  - how to
+  - walkthrough
+  - demo
+  - course
+  - screen
+  - record
+  - guide
+
+# Max videos to fetch per query
+max_results_per_query: 50
+
+# Output JSONL path (relative to the working directory)
+output_path: data/videos.jsonl

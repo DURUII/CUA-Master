@@ -1,0 +1,33 @@
+schema_version: 1
+
+# Example policy-model endpoint pool for trajectory collection
+# (referenced by configs/collection/vm_matrix*.example.json as
+# backend_options.model_endpoint_pool).
+#
+# The pool serves one logical model behind one or more OpenAI-compatible
+# base URLs; the collector load-balances across them and cools down
+# endpoints that fail. Keep the credential in the environment; never put
+# the key value in this file.
+model: your-model-name
+base_urls:
+  - https://your-model-endpoint.example.com/v1
+
+api:
+  # chat_completions or responses
+  wire_api: chat_completions
+  api_key_env: CUAMASTER_POLICY_API_KEY
+  # Optional for reasoning models: low / medium / high / xhigh
+  # reasoning_effort: high
+  store: false
+  # Set false to bypass HTTP(S) proxy environment variables for this pool.
+  trust_env: true
+
+routing:
+  # Re-read this file before each request so endpoints can be rotated live.
+  reload_on_request: true
+  # Consecutive failures before an endpoint is put on cooldown.
+  failure_threshold: 1
+  cooldown_seconds: 15
+  # Enable only for local serving stacks that expose the SGLang /v1/loads
+  # probe; leaves round-robin otherwise.
+  load_aware: false
