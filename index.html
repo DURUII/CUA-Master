@@ -134,7 +134,13 @@
   tbody tr:last-child { border-bottom: none; }
   tr.ours { background: var(--green-soft); font-weight: 700; }
   tr.ours td:first-child { color: var(--green); }
-  .closed { color: var(--ink-soft); }
+  tr.group td {
+    background: var(--bg-soft); font-weight: 700; font-size: 13px;
+    letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft);
+    padding: 7px 16px;
+  }
+  td.best { font-weight: 700; color: var(--accent); }
+  .closed td:first-child { color: var(--ink-soft); }
   .tbl-note { font-size: 12.5px; color: var(--ink-soft); margin-top: 10px; }
 
   /* ---------- bibtex ---------- */
@@ -289,22 +295,37 @@
       <table>
         <thead>
           <tr>
-            <th>Method</th><th>Params</th>
-            <th>OSWorld Verified</th><th>OSWorld 2.0</th><th>WeaveBench</th><th>Agents&rsquo; Last Exam</th>
+            <th>Method</th>
+            <th>OSWorld Verified&nbsp;†</th><th>OSWorld 2.0&nbsp;†</th><th>WeaveBench&nbsp;‡</th><th>Agents&rsquo; Last Exam&nbsp;‡</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="closed"><td>Claude-Opus-5 *</td><td>&ndash;</td><td>86.3</td><td>64.2</td><td>55.7</td><td>28.3</td></tr>
-          <tr class="closed"><td>GPT-5.6-Sol *</td><td>&ndash;</td><td>83.6</td><td>59.0</td><td>50.6</td><td>26.3</td></tr>
-          <tr><td>Kimi-K3-2.8T-A104B</td><td>2.8T</td><td>84.2</td><td>55.9</td><td>43.2</td><td>25.0</td></tr>
-          <tr><td>Qwen-CUA-397B-A17B</td><td>397B</td><td>84.0</td><td>43.6</td><td>35.1</td><td>21.1</td></tr>
-          <tr><td>Qwen-3.8-27B</td><td>27B</td><td>81.2</td><td>36.5</td><td>29.2</td><td>19.1</td></tr>
-          <tr><td>UI-Mate-27B</td><td>27B</td><td>77.6</td><td>24.0</td><td>18.3</td><td>13.2</td></tr>
-          <tr class="ours"><td>CUA-Master-27B (Ours)</td><td>27B</td><td>80.2</td><td>36.9</td><td>43.9</td><td>25.0</td></tr>
+          <tr class="group"><td colspan="5">Generalist</td></tr>
+          <tr><td>Qwen-3.5-27B</td><td>54.6</td><td>0.8</td><td>13.5</td><td>1.3</td></tr>
+          <tr><td>Qwen-3.5-397B-A17B</td><td>61.0</td><td>10.1</td><td>19.6</td><td>5.3</td></tr>
+          <tr><td>Qwen-3.6-27B</td><td>61.4</td><td>8.9</td><td>16.5</td><td>5.3</td></tr>
+          <tr><td>Qwen-3.8-27B</td><td>81.2</td><td>36.5</td><td>14.1</td><td>19.1</td></tr>
+          <tr><td>Qwen-3.8-Max</td><td>82.8</td><td>44.7</td><td>29.2</td><td>25.0</td></tr>
+          <tr><td>Minimax-M3-428B-A23B</td><td>68.3</td><td>23.0</td><td>&ndash;</td><td>&ndash;</td></tr>
+          <tr><td>Kimi-K2.6-1T-A32B</td><td>72.7</td><td>&ndash;</td><td>&ndash;</td><td>10.5</td></tr>
+          <tr><td>Kimi-K3-2.8T-A104B</td><td>84.2</td><td>55.9</td><td>43.2</td><td>25.0</td></tr>
+          <tr class="closed"><td>Seed-2.1-Pro *</td><td>69.8</td><td>&ndash;</td><td>&ndash;</td><td>17.1</td></tr>
+          <tr class="closed"><td>GPT-5.6-Luna *</td><td>77.3</td><td>46.3</td><td>44.0</td><td>22.4</td></tr>
+          <tr class="closed"><td>GPT-5.6-Sol *</td><td>83.6</td><td>59.0</td><td>50.6</td><td>26.3</td></tr>
+          <tr class="closed"><td>Claude-Sonnet-5 *</td><td>79.0</td><td>&ndash;</td><td>40.8</td><td>&ndash;</td></tr>
+          <tr class="closed"><td>Claude-Opus-5 *</td><td class="best">86.3</td><td class="best">64.2</td><td class="best">55.7</td><td class="best">28.3</td></tr>
+          <tr class="group"><td colspan="5">Specialist</td></tr>
+          <tr><td>OpenCUA-72B</td><td>59.3</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+          <tr><td>CUA-Gym-397B-A17B</td><td>72.0</td><td>14.5</td><td>14.0</td><td>&ndash;</td></tr>
+          <tr><td>EvoCUA-1.5-32B</td><td>62.9</td><td>6.9</td><td>&ndash;</td><td>&ndash;</td></tr>
+          <tr><td>ScaleCUA-9B</td><td>69.8</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+          <tr><td>Qwen-CUA-397B-A17B</td><td>84.0</td><td>43.6</td><td>35.1</td><td>21.1</td></tr>
+          <tr><td>UI-Mate-27B</td><td>77.6</td><td>24.0</td><td>18.3</td><td>13.2</td></tr>
+          <tr class="ours"><td>CUA-Master-27B (Ours)</td><td>80.2</td><td>36.9</td><td>43.9</td><td>25.0</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="tbl-note">* closed-source models. OSWorld benchmarks are GUI-only; WeaveBench and Agents&rsquo; Last Exam use GUI+CLI hybrid assessment. Full table with step / token / time metrics in the paper.</p>
+    <p class="tbl-note">Average scores (Agents&rsquo; Last Exam: full-pass rate). * closed-source models; † GUI-only evaluation; ‡ GUI+CLI hybrid assessment; <span style="color:var(--accent);font-weight:600;">red</span> marks the best score per benchmark. Full table with per-task step / token / time metrics in the paper.</p>
     <figure>
       <img src="static/images/fig3_efficiency.png" alt="Efficiency comparison: score vs. wall-clock time">
       <figcaption>Performance&ndash;efficiency trade-off: score (y) vs. wall-clock runtime (x); bubble size denotes token consumption. CUA-Master sits in the favorable upper-left region.</figcaption>
