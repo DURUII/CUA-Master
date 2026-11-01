@@ -2,44 +2,17 @@
 
 Official codebase for **CUAMaster: Scaling Computer-Use Agents through Open-World Recursive Improvement**.
 
-CUAMaster is a nested double-loop recursive improvement framework for computer-use agents (CUAs). At the system level, an outer **world–data–model flywheel** continuously incorporates open-world corpus and leverages evolving model weaknesses to guide subsequent data construction and optimization. At the data level, an inner flywheel couples **open-world seeding** and **autocatalytic propagation**: the former mines authentic workflows from instructional videos and reconstructs trajectories via a visual-semantic dual-path mechanism; the latter abstracts seeds into reusable primitives for controllable synthesis of diverse, complex, and verifiable tasks. A **feedback-guided snapshot-rollback retry** mechanism enables efficient and reliable trajectory collection in real environments.
 
-## Repository layout
+[![arXiv](https://img.shields.io/badge/arXiv-2111.00000-b31b1b.svg?style=flat-square)](https://arxiv.org/abs/XXXXXX)
+[![Project Page](https://img.shields.io/badge/Project%20Page-homepage-blue.svg?style=flat-square)](https://xlyu0106.github.io/CUA-Master/)
+[![Model](https://img.shields.io/badge/Model-HuggingFace-yellow.svg?style=flat-square)](https://huggingface.co/yxl66666/CUAMaster-27B)
+[![GitHub](https://img.shields.io/badge/GitHub-Code-black.svg?style=flat-square)](https://github.com/xlyu0106/CUA-Master)
 
-```
-cuamaster/
-├── action_space.py     # Hybrid atomic action space (GUI computer.* + CLI shell.exec + tool.call + finish)
-├── contracts.py        # Trajectory data contracts shared across the pipeline
-├── endpoints.py        # Dynamic model endpoint pools for annotator/policy serving
-├── openai_api.py       # OpenAI-compatible API helpers
-├── runtime/            # Benchmark-independent canonical CUA runtime (episodes, tools, XML protocol)
-├── benchmarks/         # Benchmark interaction harnesses (GUI / CLI / hybrid modes)
-├── seeding/            # Open-world seeding (paper Sec. 2.3)
-│   ├── harvesting/     #   Corpus harvesting: taxonomy-driven video search & download
-│   ├── transcription/  #   Whisper-based timestamped transcription
-│   ├── scoring/        #   CUA suitability scoring and filtering
-│   ├── reconstruction/ #   Visual-semantic dual-path trajectory reconstruction
-│   ├── rewriting/      #   Action rewriting and refinement
-│   └── cleaning/       #   Dedup, metadata/noise filtering, merging
-├── propagation/        # Autocatalytic propagation (paper Sec. 2.4)
-│   ├── primitives/     #   Ability primitive extraction and the primitive library
-│   ├── generation/     #   Primitive-based composable task synthesis (K primitives × N apps)
-│   ├── compilers/      #   Task compilation to executable benchmark formats
-│   ├── evaluators/     #   Task-level verifier construction
-│   └── validation/     #   Synthesis quality gates
-└── collection/         # Resilient trajectory collection (paper Sec. 2.4.2)
-    ├── providers/      #   Sandbox/VM providers (snapshot & rollback interface)
-    ├── backends/       #   Environment backends
-    └── ...             #   Collector, episodes, quality gates, dataset export
 
-configs/                # Example configurations (endpoints are placeholders)
-docs/                   # Action space, runtime, and interaction-harness references
-examples/               # No-VM mock runner demonstrating the collector contract
-prompts/                # The eight annotator role prompts (paper Fig. 11–18, Table 8)
-scripts/                # SFT data preparation, VM image tooling, pipeline utilities
-vm_images/              # VM image catalog tooling
-tests/                  # Test suite
-```
+<p align="center">
+  <img src="./img/com.png" width="100%" alt="com" />
+</p>
+
 
 ## Installation
 
@@ -48,7 +21,7 @@ pip install -e ".[seeding,annotator,collection,dev]"
 cp .env.example .env    # fill in your API keys and sandbox service endpoints
 ```
 
-## Pipeline overview
+## Overview
 
 1. **Corpus harvesting** — `cuamaster.seeding.harvesting` retrieves instructional videos with taxonomy-driven compositional queries (`configs/seeding/taxonomy.yaml`, 8 domains / 36 subdomains / 650+ apps), then deduplicates and filters them.
 2. **Suitability scoring** — `cuamaster.seeding.scoring` transcribes audio and scores CUA suitability with an annotator model (`prompts/video_suitability_scoring.txt`).
@@ -57,7 +30,12 @@ cp .env.example .env    # fill in your API keys and sandbox service endpoints
 5. **Resilient trajectory collection** — `cuamaster.collection` rolls out tasks in sandboxed environments with feedback-guided snapshot-rollback retries. The sandbox manager is exposed as a provider interface (`cuamaster/collection/providers/`); plug in your own VM/sandbox orchestration backend.
 6. **Model training** — `scripts/prepare_*_sft.py` convert verified trajectories into SFT datasets (ms-swift format); RL uses the task-specific verifiers for outcome-based rewards.
 
-## Usage
+
+<p align="center">
+  <img src="./img/method.png" width="100%" alt="com" />
+</p>
+
+## Quick Start
 
 Every CLI below supports `--help` for the full option list. Installed console
 commands (`cuamaster-*`) are available after `pip install -e .`; the
@@ -162,11 +140,6 @@ validate_action({"type": "computer.click", "args": {"x": 500, "y": 300}})  # [0,
 ```
 
 
-## Notes
-
-- Pointer coordinates are normalized to `[0, 1000]` (resolution-independent).
-- The snapshot/rollback sandbox provider is an interface: implementations must supply VM lifecycle, incremental snapshots with state signatures, and rollback (see `cuamaster/collection/providers/sandbox.py`).
-
 ## Citation
 
 ```bibtex
@@ -175,3 +148,7 @@ validate_action({"type": "computer.click", "args": {"x": 500, "y": 300}})  # [0,
   year={2026}
 }
 ```
+
+
+## Acknowledgements
+We sincerely thank for the open-source code for [OpenComputer](https://github.com/echo0715/OpenComputer), [ScaleCUA](https://github.com/THUDM/SCALE-CUA) and [Weavebench](https://github.com/weavebench/WeaveBench).
