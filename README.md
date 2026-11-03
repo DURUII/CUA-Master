@@ -3,7 +3,7 @@
 Official codebase for **CUAMaster: Scaling Computer-Use Agents through Open-World Recursive Improvement**.
 
 
-[![arXiv](https://img.shields.io/badge/arXiv-2111.00000-b31b1b.svg?style=flat-square)](https://arxiv.org/abs/XXXXXX)
+[![arXiv](https://img.shields.io/badge/arXiv-2611.003126-b31b1b.svg?style=flat-square)](https://arxiv.org/pdf/2611.03126)
 [![Project Page](https://img.shields.io/badge/Project%20Page-homepage-blue.svg?style=flat-square)](https://xlyu0106.github.io/CUA-Master/)
 [![Model](https://img.shields.io/badge/Model-HuggingFace-yellow.svg?style=flat-square)](https://huggingface.co/yxl66666/CUAMaster-27B)
 [![GitHub](https://img.shields.io/badge/GitHub-Code-black.svg?style=flat-square)](https://github.com/xlyu0106/CUA-Master)
