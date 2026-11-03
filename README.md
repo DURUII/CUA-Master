@@ -143,8 +143,10 @@ validate_action({"type": "computer.click", "args": {"x": 500, "y": 300}})  # [0,
 ## Citation
 
 ```bibtex
-@article{cuamaster,
-  title={CUAMaster: Scaling Computer-Use Agents through Open-World Recursive Improvement},
+@article{yu2026cuamaster,
+  title={CUA-Master: Scaling Computer-use Agents through Open-World Recursive Improvements},
+  author={Yu, Xinlei and Li, Gen and Zhao, Ji and Chen, Zhangquan and Wang, Congcong and Dong, Shuai and Peng, Zelin and Xu, Yuqi and Wu, Hongrui and Tuo, Kaiwen and Yang, Cheng and Feng, Kaituo and Wu, Yifan and Zhang, Jiayi and Wu, Dongming and Shao, Wenqi and Wang, Jiaqi and Yue, Xiangyu},
+  journal={arXiv preprint arXiv:2611.03126},
   year={2026}
 }
 ```
